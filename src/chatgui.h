@@ -6,6 +6,7 @@
 class ChatLogic; // forward declaration
 
 // middle part of the window containing the dialog between user and chatbot
+// Owns the _chatLogic handlkle, as well as ressources need to draw in the ChatBotFrame
 class ChatBotPanelDialog : public wxScrolledWindow
 {
 private:
@@ -16,7 +17,7 @@ private:
     //// STUDENT CODE
     ////
 
-    ChatLogic *_chatLogic;
+    std::unique_ptr<ChatLogic> _chatLogic;
 
     ////
     //// EOF STUDENT CODE
@@ -27,7 +28,7 @@ public:
     ~ChatBotPanelDialog();
 
     // getter / setter
-    ChatLogic *GetChatLogicHandle() { return _chatLogic; }
+    ChatLogic *GetChatLogicHandle() { return _chatLogic.get(); }
 
     // events
     void paintEvent(wxPaintEvent &evt);

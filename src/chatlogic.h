@@ -10,6 +10,12 @@ class ChatBot;
 class GraphEdge;
 class GraphNode;
 
+/* ChatLogic is in charge of following:
+- loading the knowledge graph from a file
+- Relaying the communication between user input and chatBot, that is between
+a ChatBotPanelDialog and the ChatBot.
+- owns the graph ressources and the chatbot handler
+*/
 class ChatLogic
 {
 private:
@@ -17,7 +23,7 @@ private:
     ////
 
     // data handles (owned)
-    std::vector<GraphNode *> _nodes;
+    std::vector<std::unique_ptr<GraphNode>> _nodes;
     std::vector<GraphEdge *> _edges;
 
     ////
