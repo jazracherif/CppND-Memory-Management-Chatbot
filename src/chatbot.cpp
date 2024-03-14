@@ -118,7 +118,7 @@ ChatBot& ChatBot::operator=(ChatBot &&other){
     std::cout << "ChatBot MOVE ASSIGNMENT called - create " << this << " from " << &other << std::endl;
 
     if (this == &other)
-        return *this;  
+        return *this;
 
     // free any owned handles
     if (_image != NULL)
@@ -127,7 +127,7 @@ ChatBot& ChatBot::operator=(ChatBot &&other){
     // copy handles from source (move)
     _chatLogic = other._chatLogic;
     _rootNode = other._rootNode;
-    _currentNode = other._currentNode;     
+    _currentNode = other._currentNode;
     _image = other._image;
 
     _chatLogic->SetChatbotHandle(this);
@@ -137,7 +137,7 @@ ChatBot& ChatBot::operator=(ChatBot &&other){
     other._rootNode = nullptr;
     other._currentNode = nullptr;
     other._image = NULL; 
-    
+
     return *this;
 }
 

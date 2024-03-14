@@ -57,7 +57,3 @@ GraphEdge *GraphNode::GetChildEdgeAtIndex(int index)
     ////
     //// EOF STUDENT CODE
 }
-
-ChatBot* GraphNode::getChatBotHandle(){
-    return &_chatBot;
-}
