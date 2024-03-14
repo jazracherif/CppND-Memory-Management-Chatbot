@@ -4,9 +4,10 @@
 #include <vector>
 #include <string>
 #include "chatgui.h"
+#include "chatbot.h"
 
 // forward declarations
-class ChatBot;
+// class ChatBot;
 class GraphEdge;
 class GraphNode;
 
@@ -48,7 +49,7 @@ public:
 
     // getter / setter
     void SetPanelDialogHandle(ChatBotPanelDialog *panelDialog);
-    void SetChatbotHandle(ChatBot *chatbot);
+    void SetChatbotHandle(ChatBot* chatbot);
 
     // proprietary functions
     void LoadAnswerGraphFromFile(std::string filename);

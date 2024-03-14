@@ -10,19 +10,19 @@
 
 // constructor WITHOUT memory allocation
 ChatBot::ChatBot()
-{
+{    std::cout << "ChatBot DEFAULT Constructor called for " << this << std::endl;
+
     // invalidate data handles
     _image = nullptr;
     _chatLogic = nullptr;
     _rootNode = nullptr;
 
-    std::cout << "ChatBot default Constructor called" << std::endl;
 }
 
 // constructor WITH memory allocation
 ChatBot::ChatBot(std::string filename)
 {
-    std::cout << "ChatBot Constructor" << std::endl;
+    std::cout << "ChatBot FILENAME Constructor called " << this << std::endl;
     
     // invalidate data handles
     _chatLogic = nullptr;
@@ -31,13 +31,12 @@ ChatBot::ChatBot(std::string filename)
     // load image into heap memory
     _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
 
-    std::cout << "ChatBot FILENAME Constructor called" << std::endl;
 
 }
 
 ChatBot::~ChatBot()
 {
-    std::cout << "ChatBot Destructor" << std::endl;
+    std::cout << "ChatBot Destructor " << this << std::endl;
 
     // deallocate heap memory
     if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
@@ -49,76 +48,98 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+
 ChatBot::ChatBot(const ChatBot &other){
-    // copy constructor. Simply copy the pointers of non-owning hanlde and create new resource for owning objects
+    // copy constructor. 
+    // copy the pointers of non-owning hanlde and create new resource for owned ones (image)
+    // Also ensure that _chatLogic is pointing to the new instance
+    std::cout << "ChatBot COPY CONSTRUCTOR called" <<  this << std::endl;
+
     _chatLogic = other._chatLogic;
     _rootNode = other._rootNode;
     _currentNode = other._currentNode;
 
-    _image = new wxBitmap(other._image->ConvertToImage());
+    _image = new wxBitmap();
+    *_image = *other._image;
 
-    std::cout << "ChatBot COPY CONSTRUCTOR called" << std::endl;
+    _chatLogic->SetChatbotHandle(this);
+
 }
+
+ChatBot& ChatBot::operator=(const ChatBot &other){
+    // copy assignment.
+
+    std::cout << "ChatBot COPY ASSIGNMENT called - create " << this <<  " from " << &other << std::endl;
+    if (this == &other)
+        return *this;
+
+    // free any owned handles
+    if (_image != NULL)
+        delete _image;
+
+    // copy the pointers of non-owning handles and create new resource for owned ones (image)
+    _chatLogic = other._chatLogic;
+    _rootNode = other._rootNode;
+    _currentNode = other._currentNode;
+    
+    _image = new wxBitmap();
+    *_image = *other._image;
+
+    // Ensure that _chatLogic is pointing to the new instance
+    _chatLogic->SetChatbotHandle(this);
+
+    return *this;
+}
+
 
 ChatBot::ChatBot(ChatBot &&other){
     // move constructor
+
+    std::cout << "ChatBot MOVE CONSTRUCTOR called - create " << this <<  " from " << &other << std::endl;
+
+    // copy all pointers to non-owning hanlde
     _chatLogic = other._chatLogic;
     _rootNode = other._rootNode;
     _currentNode = other._currentNode;
     _image = other._image;
 
-    // invalidate source handles
+    // Also ensure that _chatLogic is pointing to the new instance
+    _chatLogic->SetChatbotHandle(this);
+
+    // invalidate other handles
     other._chatLogic = nullptr;
     other._rootNode = nullptr;
     other._currentNode = nullptr;
-    if (other._image != NULL){
-        delete other._image;
-        other._image = NULL;
-    }
-
-    std::cout << "ChatBot MOVE CONSTRUCTOR called" << std::endl;
-}
-
-ChatBot& ChatBot::operator=(const ChatBot &other){
-    // copy assignment. Simply copy the pointers of non-owning hanlde and create new resource for owning objects
-    _chatLogic = other._chatLogic;
-    _rootNode = other._rootNode;
-    _currentNode = other._currentNode;
-    _image = new wxBitmap(other._image->ConvertToImage());
-
-    std::cout << "ChatBot COPY ASSIGNMENT called" << std::endl;
-
-    return *this;
+    other._image = NULL;
 }
 
 ChatBot& ChatBot::operator=(ChatBot &&other){
     // move assignment
+    std::cout << "ChatBot MOVE ASSIGNMENT called - create " << this << " from " << &other << std::endl;
 
-    // clear existing ressources handled
-    if (_image != NULL){
+    if (this == &other)
+        return *this;  
+
+    // free any owned handles
+    if (_image != NULL)
         delete _image;
-        _image = NULL;
-    }
+
     // copy handles from source (move)
     _chatLogic = other._chatLogic;
     _rootNode = other._rootNode;
-    _currentNode = other._currentNode;        
+    _currentNode = other._currentNode;     
     _image = other._image;
 
-    // invalidate source handles
+    _chatLogic->SetChatbotHandle(this);
+
+    // invalidate other handles
     other._chatLogic = nullptr;
     other._rootNode = nullptr;
     other._currentNode = nullptr;
-
-    if (other._image != NULL){
-        delete other._image;
-        other._image = NULL;
-    }
-
-    std::cout << "ChatBot MOVE ASSIGNMENT called" << std::endl;
+    other._image = NULL; 
+    
     return *this;
 }
-
 
 ////
 //// EOF STUDENT CODE
